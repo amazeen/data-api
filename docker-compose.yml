@@ -1,0 +1,31 @@
+version: '3.9'
+
+services:
+
+  influxdb:
+    image: influxdb:2.0-alpine
+    ports:
+      - 8086:8086
+    volumes:
+      - ./compose/datadb:/var/lib/influxdb2
+    environment: 
+      DOCKER_INFLUXDB_INIT_MODE: setup
+      DOCKER_INFLUXDB_INIT_USERNAME: admin
+      DOCKER_INFLUXDB_INIT_PASSWORD: adminadmin
+      DOCKER_INFLUXDB_INIT_ORG: org
+      DOCKER_INFLUXDB_INIT_BUCKET: bucket
+      DOCKER_INFLUXDB_INIT_ADMIN_TOKEN: token
+        
+  postgres:
+    image: postgres:12-alpine
+    ports:
+      - 5432:5432
+    volumes:
+      - ./configdb-tables.sql:/docker-entrypoint-initdb.d/10-create-tables.sql
+      - ./configdb-data.sql:/docker-entrypoint-initdb.d/20-insert-data.sql
+      - ./compose/configdb:/var/lib/postgresql/data
+    environment:
+      POSTGRES_USER:     postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB:       config
+
