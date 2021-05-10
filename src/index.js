@@ -11,7 +11,7 @@ fastify.decorate('db', {
 //fastify.register(require('fastify-cors'),   {origin: '*'})
 fastify.register(require('./routes'))
 
-fastify.listen(3000, '0.0.0.0', (err, address) => {
+fastify.listen(process.env.PORT || 3000, '0.0.0.0', (err, address) => {
     if (err) {
       fastify.log.error(err)
       process.exit(1)
