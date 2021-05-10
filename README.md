@@ -3,7 +3,7 @@ Api used to retrieve data
 
 ## Environment variables
 
- **POSTGRES_HOST** : app port              (eg. `3000`)
+ **PORT** : app port              (eg. `3000`)
 
  **POSTGRES_HOST** : postgresql host       (eg. `localhost`)\
  **POSTGRES_PORT** : postgresql port       (eg. `5432`)\
