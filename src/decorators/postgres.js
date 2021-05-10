@@ -1,13 +1,11 @@
   
 const { Pool } = require('pg')
+const parse = require('pg-connection-string').parse
 
-const pool = new Pool({
-    host: process.env.POSTGRES_HOST,
-    port: process.env.POSTGRES_PORT,
-    user: process.env.POSTGRES_USER,
-    password: process.env.POSTGRES_PASS,
-    database: process.env.POSTGRES_DB
-})
+const config = parse(process.env.POSTGRESQL_URL)
+if(process.env.POSTGRESQL_SSL) config.ssl = { ...config.ssl, rejectUnauthorized: false }
+
+const pool = new Pool(config)
 
 const getAreas = async () => {
     try {
