@@ -8,7 +8,7 @@ fastify.decorate('db', {
     data:   require('./decorators/influx')
 })  
 
-//fastify.register(require('fastify-cors'),   {origin: '*'})
+fastify.register(require('fastify-cors'), {origin: '*'})
 fastify.register(require('./routes'))
 
 fastify.listen(process.env.PORT || 3000, '0.0.0.0', (err, address) => {
