@@ -29,3 +29,12 @@ services:
       POSTGRES_PASSWORD: postgres
       POSTGRES_DB:       config
 
+  rabbitmq:
+    image: rabbitmq:3.8-management-alpine
+    ports:
+        - 5672:5672
+        - 15672:15672
+    volumes:
+        - ./compose/rabbitmq/data/:/var/lib/rabbitmq/
+        - ./compose/rabbitmq/log/:/var/log/rabbitmq
+
