@@ -2,7 +2,7 @@
 const { Pool } = require('pg')
 const parse = require('pg-connection-string').parse
 
-const config = parse(process.env.POSTGRESQL_URL)
+const config = parse(process.env.POSTGRESQL_URL || '')
 if(process.env.POSTGRESQL_SSL) config.ssl = { ...config.ssl, rejectUnauthorized: false }
 
 const pool = new Pool(config)
@@ -53,7 +53,8 @@ const getThresholdsBySiloId = async (silo) => {
 
 const updateThresholdsBySiloId = async (silo, thresholds) => {
     try {
-        const result = Promise.all(thresholds.map(async (threshold) => {
+        const result = await Promise.all(thresholds.map(async (threshold) => {
+      
             const query = 'UPDATE thresholds SET minimum = $1, maximum = $2 WHERE silo_id = $3 AND type = $4 RETURNING *;'
             const result = await pool.query(query, [threshold.minimum, threshold.maximum, silo, threshold.type])
             return result.rows[0]
@@ -70,7 +71,6 @@ const updateThresholdsBySiloId = async (silo, thresholds) => {
 module.exports = {
     getAreas,
     getAreaById,
-    // getSiloById,
     getSilosByAreaId,
     getThresholdsBySiloId,
     updateThresholdsBySiloId

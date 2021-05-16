@@ -3,6 +3,7 @@ module.exports = async (fastify, options) => {
     const config = fastify.db.config
     const data   = fastify.db.data
     const auth   = fastify.auth
+    const bus    = fastify.bus
     
     const { areaValidator }           = require('./validators/area')
     const { historyValidator }        = require('./validators/history')
@@ -47,8 +48,6 @@ module.exports = async (fastify, options) => {
 
             const result = await config.getThresholdsBySiloId(silo)
 
-            console.log(result)
-
             if(!result) return res.status(500).send()
 
             return result
@@ -90,8 +89,24 @@ module.exports = async (fastify, options) => {
             const result = await data.insertParameter(area, silo, type, value, active)
             if(!result) return res.status(500).send()
 
+            processThreshold(area, silo, type, value, active)
+
             return res.status(201).send()
         })
+
+        const processThreshold = async (area, silo, type, value, active) => {
+
+            try{
+                const thresholds = await config.getThresholdsBySiloId(silo)
+                const threshold = thresholds.find(x => x.type === type)
+
+                if(value < threshold.minimum || value > threshold.maximum) bus.sendParameterAboveThreshold(area, silo, type, value)
+                bus.sendParameterReading(area, silo, type, value, active)
+            }
+            catch(err) {
+                console.warn(err)
+            }
+        }
     })
 
     fastify.register(async (fastify) => {

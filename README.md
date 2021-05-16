@@ -11,3 +11,5 @@ Api used to retrieve data
  **INFLUXDB_TOKEN**  : influxdb api token         (eg. `234567890309876542q`)\
  **INFLUXDB_BUCKET** : influxdb bucket            (eg. `default`)\
  **INFLUXDB_ORG**    : influxdb organization      (eg. `org-1`)
+ 
+ **RABBITMQ_URL**    : rabbitmq connection string (eg. `amqp://localhost`)

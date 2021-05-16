@@ -1,7 +1,7 @@
 const { InfluxDB, flux, Point } = require('@influxdata/influxdb-client')
 
 const url    = process.env.INFLUXDB_URL
-const bucket = process.env.INFLUXDB_BUCKET
+const bucket = process.env.INFLUXDB_BUCKET || ''
 const org    = process.env.INFLUXDB_ORG
 const token  = process.env.INFLUXDB_TOKEN
 
@@ -99,8 +99,6 @@ const insertParameter = async (area, silo, type, value, active) => {
 
     try{
         if(type == 'capacity') fieldValue = await storeFractionAndGetScalar(area, silo, type, value, active)
-
-        console.log(fieldValue)
 
         const point = new Point('scalar')
             .tag('area', area)
