@@ -1,5 +1,6 @@
 const amqp = require('amqplib')
 
+const url = process.env.RABBITMQ_URL || ''
 const exchange = 'parameters'
 const timeout = 5
 
@@ -12,7 +13,7 @@ const init = async () => {
     channel = null
 
     try{
-        connection = await amqp.connect('amqp://localhost')
+        connection = await amqp.connect(url)
         channel = await connection.createChannel()
         channel.assertExchange(exchange, 'fanout', { durable: false })
     }
