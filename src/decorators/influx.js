@@ -100,8 +100,6 @@ const insertParameter = async (area, silo, type, value, active) => {
     try{
         if(type == 'capacity') fieldValue = await storeFractionAndGetScalar(area, silo, type, value, active)
 
-        console.log(fieldValue)
-
         const point = new Point('scalar')
             .tag('area', area)
             .tag('silo', silo)

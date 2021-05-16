@@ -48,8 +48,6 @@ module.exports = async (fastify, options) => {
 
             const result = await config.getThresholdsBySiloId(silo)
 
-            console.log(result)
-
             if(!result) return res.status(500).send()
 
             return result
