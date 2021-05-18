@@ -23,15 +23,15 @@ const init = async () => {
     }
 }
 
-const sendParameterReading = (area, silo, type, value) => {
+const sendParameterReading = (area, silo, type, value, active) => {
     const msgType = 'parameter:reading'
-    const data = {area, silo, type, value}
+    const data = {area, silo, type, value, active}
     sendMessage(msgType, data)
 }
 
-const sendParameterAboveThreshold = (area, silo, type, value, active) => {
+const sendParameterAboveThreshold = (area, silo, type, value) => {
     const msgType = 'parameter:threshold-reached'
-    const data = {area, silo, type, value, active}
+    const data = {area, silo, type, value}
     sendMessage(msgType, data)
 }
 
