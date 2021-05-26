@@ -5,38 +5,12 @@ services:
     build: .
     ports:
       - 80:3000
-    depends_on:
-      - data-db
-      - parameters-db
     restart: unless-stopped
     environment: 
       PORT:            3000
-      POSTGRESQL_URL:  postgres://postgres:postgres@parameters-db:5432/config
-      INFLUXDB_URL:    http://data-db:8086
-      INFLUXDB_TOKEN:  token 
-      INFLUXDB_BUCKET: bucket 
-      INFLUXDB_ORG:    org
+      POSTGRESQL_URL:  ${POSTGRESQL_URL:?POSTGRESQL_URL is missing}
+      INFLUXDB_URL:    ${INFLUXDB_URL:?INFLUXDB_URL is missing}
+      INFLUXDB_TOKEN:  ${INFLUXDB_TOKEN:?INFLUXDB_TOKEN is missing}
+      INFLUXDB_BUCKET: ${INFLUXDB_BUCKET:?INFLUXDB_BUCKET is missing}
+      INFLUXDB_ORG:    ${INFLUXDB_ORG:?INFLUXDB_ORG is missing}
       RABBITMQ_URL:    ${RABBITMQ_URL:?RABBITMQ_URL is missing}
-
-  data-db:
-    image: influxdb:2.0-alpine
-    volumes:
-      - ./compose/datadb:/var/lib/influxdb2
-    environment: 
-      DOCKER_INFLUXDB_INIT_MODE:        setup
-      DOCKER_INFLUXDB_INIT_USERNAME:    admin
-      DOCKER_INFLUXDB_INIT_PASSWORD:    adminadmin
-      DOCKER_INFLUXDB_INIT_ORG:         org
-      DOCKER_INFLUXDB_INIT_BUCKET:      bucket
-      DOCKER_INFLUXDB_INIT_ADMIN_TOKEN: token
-        
-  parameters-db:
-    image: postgres:12-alpine
-    volumes:
-      - ./configdb-tables.sql:/docker-entrypoint-initdb.d/10-create-tables.sql
-      - ./configdb-data.sql:/docker-entrypoint-initdb.d/20-insert-data.sql
-      - ./compose/configdb:/var/lib/postgresql/data
-    environment:
-      POSTGRES_USER:     postgres
-      POSTGRES_PASSWORD: postgres
-      POSTGRES_DB:       config
