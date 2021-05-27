@@ -97,11 +97,14 @@ module.exports = async (fastify, options) => {
         const processThreshold = async (area, silo, type, value, active) => {
 
             try{
+                bus.sendParameterReading(area, silo, type, value, active)
+
                 const thresholds = await config.getThresholdsBySiloId(silo)
                 const threshold = thresholds.find(x => x.type === type)
 
+                if(type == 'capacity') value = await data.getLastCapacityScalar(silo)
+
                 if(value < threshold.minimum || value > threshold.maximum) bus.sendParameterAboveThreshold(area, silo, type, value)
-                bus.sendParameterReading(area, silo, type, value, active)
             }
             catch(err) {
                 console.warn(err)
