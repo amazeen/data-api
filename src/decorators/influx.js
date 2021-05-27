@@ -54,6 +54,11 @@ const getParameters = async (silo) => {
         return false
     }
 }
+
+const getLastCapacityScalar = async (silo) => {
+    const parameters = await getParameters(silo)
+    return parameters?.capacity ?? NaN
+}
     
 const getLastActiveCapacityFraction = async (silo) => {
 
@@ -118,4 +123,4 @@ const insertParameter = async (area, silo, type, value, active) => {
     
 }
 
-module.exports = {getHistory, getParameters, insertParameter}
+module.exports = {getHistory, getParameters, getLastCapacityScalar, insertParameter}

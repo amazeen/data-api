@@ -1,6 +1,6 @@
 const expect = require('chai').expect
 
-const { getHistory, getParameters, insertParameter} = require('../decorators/influx')
+const { getHistory, getParameters, insertParameter, getLastCapacityScalar} = require('../decorators/influx')
 
 describe('influx decorator', function() {
 
@@ -43,6 +43,27 @@ describe('influx decorator', function() {
         it('should return a falsy value when an error occurs', async function() {
 
             const parameters = await getParameters(silo)
+            expect(parameters).to.satisfy(() => !parameters, 'parameters is not falsy')
+        })
+    })
+
+    describe('getLastCapacityScalar()', function() {
+
+        const silo = 1
+
+        it('should not throw with no connection to the database', async function() {
+
+            try{
+                await getLastCapacityScalar(silo)
+            }
+            catch(err) {
+                expect.fail('the function threw an error')
+            }
+        })
+
+        it('should return a falsy value when an error occurs', async function() {
+
+            const parameters = await getLastCapacityScalar(silo)
             expect(parameters).to.satisfy(() => !parameters, 'parameters is not falsy')
         })
     })
